@@ -44,12 +44,21 @@ async function addCustomer(customer) {
             { upsert: true }
         );
 
+          // Define keywords for urgency
+        const urgentKeywords = ["urgent", "loan", "help now", "immediate", "asap"];
+        const isUrgent = urgentKeywords.some(keyword =>
+        messageBody.toLowerCase().includes(keyword.toLowerCase())
+    );
+    
+
+
         // Insert the message
         await Message.updateOne(
             { user_id: userId, timestamp: timestamp },
             {
                 user_id: userId,
                 message_body: messageBody,
+                priority: isUrgent ? 'high' : 'low', 
             },
             { upsert: true }  // This ensures the message is only inserted if it doesn't already exist
         );

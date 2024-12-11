@@ -12,9 +12,14 @@ messagesRouter.get("/unassigned", async (req, res) => {
                     _id: "$user_id", // Group by user ID
                     latest_message: { $last: "$message_body" }, // Latest message of the user
                     latest_timestamp: { $last: "$timestamp" }, // Timestamp of the latest message
+                    latest_priority: { $last: "$priority" }
+
                 },
             },
-            { $sort: { latest_timestamp: -1 } }, // Sort by latest message timestamp
+            {  $sort: {
+                latest_priority: 1, // Sort by priority: "high" (1) first, "low" (0) last
+                latest_timestamp: -1, // Then sort by timestamp: latest first
+            }, }, // Sort by latest message timestamp
         ]);
 
         res.status(200).json({ chats: messages });
@@ -63,6 +68,12 @@ messagesRouter.post('', async (req, res) => {
         return res.status(400).json({ error: "Name, email, and message body are required." });
     }
 
+    // Define keywords for urgency
+    const urgentKeywords = ["urgent", "loan approval", "help now", "immediate", "asap"];
+    const isUrgent = urgentKeywords.some(keyword =>
+        message_body.toLowerCase().includes(keyword.toLowerCase())
+    );
+
     try {
         // Check if the user exists
         let user = await User.findOne({ email });
@@ -78,7 +89,8 @@ messagesRouter.post('', async (req, res) => {
         // Save the message
         const message = new Message({
             user_id: user.user_id,
-            message_body
+            message_body,
+            priority: isUrgent ? "high" : "low" // Mark high only if urgent
         });
         await message.save();
 
@@ -88,6 +100,7 @@ messagesRouter.post('', async (req, res) => {
         res.status(500).json({ error: "Server error." });
     }
 });
+
 
 
 

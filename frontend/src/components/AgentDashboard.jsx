@@ -51,7 +51,7 @@ const AgentDashboard = () => {
                                     <p className="text-lg font-medium">{message._id}</p>
                                     <p className="text-gray-400 text-sm">{message.latest_message}</p>
                                 </div>
-                                {message.urgent && (
+                                {message?.latest_priority=="high" && (
                                     <span className="px-2 py-1 bg-red-500 text-xs font-semibold rounded-full">
                                         Urgent
                                     </span>
