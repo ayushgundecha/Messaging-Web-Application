@@ -1,9 +1,12 @@
 const express = require('express');
 const Message = require('../models/messages.mongo');
 const User = require('../models/users.mongo');
+
+const authMiddleware = require('../utlis/authMiddleware');
+
 const messagesRouter = express.Router();
 
-messagesRouter.get("/unassigned", async (req, res) => {
+messagesRouter.get("/unassigned", authMiddleware, async (req, res) => {
     try {
         const messages = await Message.aggregate([
             { $match: { assigned_to: null } }, // Only unassigned messages
@@ -29,7 +32,7 @@ messagesRouter.get("/unassigned", async (req, res) => {
     }
 });
 
-messagesRouter.get("/conversations/:id", async (req, res) => {
+messagesRouter.get("/conversations/:id", authMiddleware,  async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -41,7 +44,7 @@ messagesRouter.get("/conversations/:id", async (req, res) => {
     }
 });
 
-messagesRouter.post("/agent/reply", async (req, res) => {
+messagesRouter.post("/agent/reply", authMiddleware,  async (req, res) => {
     const { user_id, message_body } = req.body;
 
     try {
@@ -90,7 +93,7 @@ messagesRouter.post('', async (req, res) => {
         const message = new Message({
             user_id: user.user_id,
             message_body,
-            priority: isUrgent ? "high" : "low" // Mark high only if urgent
+            priority: isUrgent ? "high" : "low" 
         });
         await message.save();
 

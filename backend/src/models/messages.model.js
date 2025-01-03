@@ -44,7 +44,7 @@ async function addCustomer(customer) {
             { upsert: true }
         );
 
-          // Define keywords for urgency
+          // Defined keywords for urgency
         const urgentKeywords = ["urgent", "loan", "help now", "immediate", "asap"];
         const isUrgent = urgentKeywords.some(keyword =>
         messageBody.toLowerCase().includes(keyword.toLowerCase())

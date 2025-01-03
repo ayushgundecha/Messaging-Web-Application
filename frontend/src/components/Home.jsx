@@ -11,7 +11,7 @@ const Home = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-black">
             <h1 className="text-5xl font-extrabold mb-16 text-white font-mono">
-                Welcome to <span className="text-blue-400">Branch Messaging App</span>
+                Welcome to <span className="text-blue-400">Conversify Messaging App</span>
             </h1>
             <div className="flex gap-6">
                 <button
@@ -30,7 +30,7 @@ const Home = () => {
 
             {/* Footer */}
             <footer className="absolute bottom-4 text-gray-500 text-sm font-roboto">
-                Built with ❤️ by Branch Team
+                Built with ❤️ by Conversify Team
             </footer>
         </div>
     );
