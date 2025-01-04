@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { fetchUnassignedMessages } from "../hooks/messages";
 
 const AgentDashboard = () => {
     const navigate = useNavigate();
@@ -8,16 +8,16 @@ const AgentDashboard = () => {
 
     // Fetch messages from the backend
     useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/messages/unassigned"); 
-                setMessages(response?.data?.chats);
-            } catch (error) {
-                console.error("Error fetching messages:", error);
-            }
+        const getMessages = async () => {
+          try {
+            const chats = await fetchUnassignedMessages();
+            setMessages(chats);
+          } catch (err) {
+            console.error("Error fetching messages:", err);
+          }
         };
-        fetchMessages();
-    }, []);
+        getMessages();
+      }, []);
 
     const handleLogout = () => {
         navigate("/");
@@ -51,7 +51,7 @@ const AgentDashboard = () => {
                                     <p className="text-lg font-medium">{message._id}</p>
                                     <p className="text-gray-400 text-sm">{message.latest_message}</p>
                                 </div>
-                                {message?.latest_priority=="high" && (
+                                {message?.latest_priority==="high" && (
                                     <span className="px-2 py-1 bg-red-500 text-xs font-semibold rounded-full">
                                         Urgent
                                     </span>

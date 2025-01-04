@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require("cookie-parser");
 
 const messagesRouter = require('./routes/messages.router');
 const authRouter = require('./routes/auth.router');
@@ -11,7 +12,13 @@ const app = express();
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
-app.use(cors());
+app.use(cookieParser());
+app.use(
+    cors({
+      origin: "http://localhost:3000", // Replace with your frontend URL
+      credentials: true, // Allow credentials (cookies) to be sent
+    })
+  );
 app.use(morgan('combined'));
 
 app.use('/api/messages', messagesRouter);

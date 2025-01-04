@@ -15,7 +15,7 @@ const Home = () => {
             </h1>
             <div className="flex gap-6">
                 <button
-                    onClick={() => handleNavigation("/agent")}
+                    onClick={() => handleNavigation("/login")}
                     className="px-8 py-4 text-lg bg-blue-500 text-white rounded-full font-roboto shadow-lg hover:bg-blue-600 transition-transform transform hover:scale-105"
                 >
                     I am an Agent

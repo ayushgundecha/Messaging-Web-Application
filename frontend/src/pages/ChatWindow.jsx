@@ -1,40 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { fetchConversationHistory,sendMessage } from "../hooks/messages";
 
 const ChatWindow = () => {
-    const { id } = useParams(); // Customer ID
+    const { id } = useParams(); 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
 
-    // Fetch conversation history
     useEffect(() => {
-        const fetchConversation = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8000/api/messages/conversations/${id}`);
-                setMessages(response?.data?.messages);
-            } catch (error) {
-                console.error("Error fetching conversation:", error);
-            }
+        const getConversation = async () => {
+          try {
+            const conversation = await fetchConversationHistory(id);
+            setMessages(conversation);
+          } catch (err) {
+            console.error("Error fetching conversation:", err);
+          }
         };
-        fetchConversation();
-    }, [messages]);
+        getConversation();
+      }, []); 
 
     // Handle sending a new message
     const handleSendMessage = async () => {
         if (newMessage.trim() === "") return;
-
+    
         try {
-            const response = await axios.post(
-                `http://localhost:8000/api/messages/agent/reply`,
-                { user_id: id , message_body: newMessage }
-            );
-            setMessages([...messages, newMessage]); // Update conversation locally
-            setNewMessage(""); // Clear the input field
-        } catch (error) {
-            console.error("Error sending message:", error);
+          const response = await sendMessage({ userId: id, messageBody: newMessage });
+          const updatedMessage = { 
+            message_body: newMessage, 
+            sender_type: "agent", 
+            timestamp: new Date().toISOString() 
+        };
+
+        setMessages((prevMessages) => [...prevMessages, updatedMessage]);
+        setNewMessage(""); 
+        } catch (err) {
+            console.error("Error sending message:", err);
         }
-    };
+      };
+
 
     return (
         <div className="flex flex-col h-screen bg-black text-white font-roboto">
