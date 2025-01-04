@@ -1,6 +1,6 @@
-# Branch Messaging App
+# Conversify Messaging App
 
-Branch Messaging App is a customer service system designed to streamline interactions between customers and agents. This web-based application enables customers to send inquiries and agents to manage and respond to messages efficiently.
+Conversify Messaging App is a customer service system designed to streamline interactions between customers and agents. This web-based application enables customers to send inquiries and agents to manage and respond to messages efficiently.
 
 ---
 
