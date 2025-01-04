@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../hooks/common";
 import floatingGraphic from "../assets/cs-support.png"; 
 import { ReactComponent as SupportIcon } from "../assets/login-icon.svg"; 
 
@@ -24,7 +24,7 @@ const CustomerForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8000/api/messages", formData);
+            const response = await apiClient.post("/api/messages", formData);
             if (response.status === 201) {
                 setSuccessMessage("Your message has been sent successfully! An agent will contact you via email shortly.");
                 setErrorMessage("");
