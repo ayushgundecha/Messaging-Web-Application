@@ -24,7 +24,7 @@ const CustomerForm = () => {
         e.preventDefault();
 
         try {
-            const response = await apiClient.post("/api/messages", formData);
+            const response = await apiClient.post("/messages", formData);
             if (response.status === 201) {
                 setSuccessMessage("Your message has been sent successfully! An agent will contact you via email shortly.");
                 setErrorMessage("");
